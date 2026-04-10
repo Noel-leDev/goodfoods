@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <title>Food_Store</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="heading1">Foods Store</h1>
+      <h3 class="heading3">Ingrédients & Secrets: L'Atlas des Recettes</h3>
+      <h4 class="heading4">
+        Découvrez des astuces et recettes de préparation des plats étrangers
+      </h4>
+      <div class="meal-container">
+        <form class="meal-container-flex" id="submit">
+          <input
+            type="text"
+            id="search"
+            placeholder="Rechercher.. e.x: pizza"
+            autocomplete="off"
+          />
+          <button class="search-btn" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+        <p>
+          Rechercher des plats comme <strong>Cake, </strong>
+          <strong>Chicken, </strong><strong>rice, </strong
+          ><strong>beef, </strong><strong>chocolate, </strong
+          ><strong>Spaghetti, </strong><strong>Lasagne, </strong
+          ><strong>Fish, </strong>etc...
+        </p>
+        <!-- <button class="random-btn" id="random">Aléatoire</button> -->
+      </div>
+      <p id="meal-result-heading" class="meal-result-heading">
+        <!-- search result for pizza -->
+      </p>
+      <div class="meals-container">
+        <div id="meals" class="all-meals"></div>
+        <div id="single-meal-container"></div>
+      </div>
+    </div>
+    <footer>
+      <p>Site des recettes de preparation des plats delicieux</p>
+      <p>Data collected from themealdb.com</p>
+      <p>By <strong>Noel Beaugare GAMEFIO</strong></p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
