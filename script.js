@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultHeading = document.getElementById("meal-result-heading");
   const mealsEl = document.getElementById("meals");
   const single_mealEl = document.getElementById("single-meal-container");
+  const youtube = document.getElementById("youtube");
 
   // function pour fetch les api data
   function findMeal(e) {
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${item}`)
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           resultHeading.innerHTML = `Résultat pour <strong>${item}</strong>`;
           // if condition
           if (data.meals === null) {
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <h3>${meal.strMeal}</h3>
               </div>         
         </div>
-  `,
+                `,
               )
               .join("");
           }
@@ -65,37 +66,51 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 1; i < 20; i++) {
       //On vérifie si l'ingrédient existe ----------et n'est pas une chaîne vide
       if (meal[`strIngredient${i}`]) {
-        //si un meal a des ingredients, on ajout ingredient
+        //si un meal a des ingredients, on ajout ingredients
         ingredients.push(`${meal[`strIngredient${i}`]} - 
-                          ${meal[`strMeasure${i}`]} `);
+                                  ${meal[`strMeasure${i}`]} `);
       } else {
-        break;
+        continue;
       }
     }
     // console.log(ingredients);
     single_mealEl.innerHTML = `
-      <div class="single-meal">
-          <h1>${meal.strMeal}</h1>
-          <div class="single-meal-info">
-    ${meal.strCategory ? `<p>${meal.strCategory}</p>` : ""}
-    ${meal.strArea ? `<p>${meal.strArea}</p>` : ""}
-          </div>
-        <img src="${meal.strMealThumb}" alt="${meal.strMeal}"/>
-        <div class="main">
-              <h2>Ingrédients</h2>
-              <ul>
-                ${ingredients
-                  .map((values) => {
-                    return `<li>${values}</li>`;
-                  })
-                  .join("")}
-              </ul>
-              
-              <h2>Instructions</h2>
-              <p>${meal.strInstructions}</p>
-          </div>
+              <div class="single-meal">
+                  <h1>${meal.strMeal}</h1>
+                          <div class="single-meal-info">
+                    ${meal.strCategory ? `<p>${meal.strCategory}</p>` : ""}
+                    ${meal.strArea ? `<p>${meal.strArea}</p>` : ""}
+                          </div>
+                        <img src="${meal.strMealThumb}" alt="${meal.strMeal}"/>
+                <div class="main">
+                      <h2>Ingrédients</h2>
+                      <ul>
+                        ${ingredients
+                          .map((values) => {
+                            return `<li>${values}</li>`;
+                          })
+                          .join("")}
+                      </ul> 
+                      <h2>Instructions</h2>
+                      <p>${meal.strInstructions}</p>
+                </div>
+              </div>
+              `;
+    console.log(meal.strYoutube);
+    youtube.innerHTML = `
+                   
+                    
+      
+                   
+          <div class="youtube-box">
+        <div class="video">
+          <iframe  src="https://www.youtube.com/embed/${getYouTubeID(meal.strYoutube)}" 
+                  frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+          </iframe>
+        </div>
       </div>
-      `;
+    `;
   }
   submit.addEventListener("submit", findMeal);
 
@@ -116,4 +131,12 @@ document.addEventListener("DOMContentLoaded", () => {
       getsingleItemId(mealID);
     }
   });
+
+  // Fonction pour obtenir l'ID de la vidéo YouTube
+  function getYouTubeID(url) {
+    const regex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
+    const matches = url.match(regex);
+    return matches ? matches[1] : null;
+  }
 });
