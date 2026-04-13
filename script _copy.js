@@ -8,35 +8,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const single_mealEl = document.getElementById("single-meal-container");
   const youtube = document.getElementById("youtube");
 
-  async function fetchData(url) {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Erreur de recuperation ...");
-    }
-    return await response.json();
-  }
   // function pour fetch les api data
   function findMeal(e) {
     e.preventDefault();
     const item = search.value;
     // console.log(item);
     // fetch api and display in browser
-
     if (item.trim()) {
-      fetchData(
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${item}`,
-      ).then((data) => {
-        // console.log(data);
-        resultHeading.innerHTML = `Résultat pour <strong>${item}</strong>`;
-        // if condition
-        if (data.meals === null) {
-          resultHeading.innerHTML = `Oops! Pas de resultats pour <em>${item} </em>`;
-        } else {
-          // alert("There is a meal name")
-          mealsEl.innerHTML = data.meals
-            .map(
-              (meal) =>
-                `<div class="meal">                
+      fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${item}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          resultHeading.innerHTML = `Résultat pour <strong>${item}</strong>`;
+          // if condition
+          if (data.meals === null) {
+            resultHeading.innerHTML = `Oops! Pas de resultats pour <em>${item} </em>`;
+          } else {
+            // alert("There is a meal name")
+            mealsEl.innerHTML = data.meals
+              .map(
+                (meal) =>
+                  `<div class="meal">                
             <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
 
               <div class="meal-info" data-mealid="${meal.idMeal}">
@@ -44,10 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>         
         </div>
                 `,
-            )
-            .join("");
-        }
-      });
+              )
+              .join("");
+          }
+        });
       //juste apres ca, je supprime vide la valeur du champs de saisie
       search.value = "";
     } else {
@@ -55,15 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   // fonction pour recuperer l'id de chaque meal
-  async function getsingleItemId(mealID) {
-    const data = await fetchData(
-      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`,
-    );
-    console.log(data);
-    const meal = data.meals[0];
-    // console.log(data);
+  function getsingleItemId(mealID) {
+    fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
 
-    addMealToDOM(meal);
+        const meal = data.meals[0];
+        // console.log(meal);
+
+        addMealToDOM(meal);
+      });
   }
 
   // fonction pour ajouter un meal au DOM
@@ -104,7 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
               `;
     // console.log(meal.strYoutube);
 
-    youtube.innerHTML = `            
+    youtube.innerHTML = `
+                
           <div class="youtube-box">
         <div class="video">
           <iframe  src="https://www.youtube.com/embed/${getYouTubeID(meal.strYoutube)}" 
